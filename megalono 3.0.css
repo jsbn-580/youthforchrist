@@ -1,0 +1,128 @@
+:root {
+  --main-color: #de5c30;
+  --accent-color: #ffd5bb;
+  --dark-color: #5c4033;
+  --light-bg: #fff7f0;
+  --box-bg: #ffffff;
+  --spark-glow: 0 0 12px rgba(255, 102, 51, 0.9);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: var(--light-bg);
+  color: var(--dark-color);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.coming-container {
+  text-align: center;
+  padding: 50px;
+  border-radius: 20px;
+  background: var(--box-bg);
+  box-shadow: 0 0 20px rgba(0,0,0,0.08);
+  position: relative;
+  width: 90%;
+  max-width: 600px;
+}
+
+.glow-box {
+  padding: 40px 20px;
+  border-radius: 20px;
+  border: 3px solid var(--main-color);
+  box-shadow: 0 0 25px rgba(222, 92, 48, 0.3);
+  position: relative;
+}
+
+.title {
+  font-size: 3rem;
+  color: var(--main-color);
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  color: var(--dark-color);
+  margin-bottom: 20px;
+}
+
+.coming-soon {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--accent-color);
+  text-shadow: var(--spark-glow);
+  animation: flicker 1.5s infinite alternate;
+  margin-bottom: 25px;
+}
+
+.countdown {
+  font-size: 1.1rem;
+  color: var(--main-color);
+  margin-bottom: 30px;
+}
+
+.home-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background: var(--main-color);
+  color: white;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.home-btn:hover {
+  background: #b8441d;
+}
+
+/* Spark Effect Lines */
+.spark-lines {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.spark {
+  position: absolute;
+  background: var(--main-color);
+  box-shadow: var(--spark-glow);
+  opacity: 0.8;
+  animation: pulse 1.5s infinite;
+}
+
+.spark.horizontal {
+  width: 140%;
+  height: 4px;
+  top: 50%;
+  left: -20%;
+}
+
+.spark.vertical {
+  height: 140%;
+  width: 4px;
+  left: 50%;
+  top: -20%;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; text-shadow: 0 0 15px var(--main-color); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 0.2; }
+}

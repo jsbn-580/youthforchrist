@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Youth for Christ</title>
+  <link rel="stylesheet" href="yfc.css"/>
+</head>
+<body>
+  <header>
+    <div class="navbar">
+      <div class="logo">Youth for Christ</div>
+      <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="yfcabout.html">About</a></li>
+        <li><a href="exe.html">Execcom</a></li>
+        <li><a href="event.html">Events</a></li>
+        <li><a href="login.html">Sign Up / Login</a></li>
+        <li><a href="yfccontact.html">Contact</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text fade-up">
+      <h1>Welcome to <br><span>Youth for Christ</span></h1>
+      <p>Empowering youth through faith, love, and service.</p>
+    </div>
+    <div class="hero-img">
+      <div class="balls">
+        <div class="ball ball1"></div>
+        <div class="ball ball2"></div>
+        <div class="ball ball3"></div>
+        <div class="ball ball4"></div>
+        <div class="ball ball5"></div>
+        <div class="ball ball6"></div>
+      </div>
+      <div class="slideshow-circle">
+        <img src="images/heads.jpg" class="slide active" alt="Slide 1" />
+        <img src="images/m1.jpg" class="slide" alt="Slide 2" />
+        <img src="images/meg2.JPG" class="slide" alt="Slide 3" />
+      </div>
+    </div>
+  </section>
+
+  <section class="button-group fade-up">
+    <div class="action-box"><h3>What Next</h3><a href="next.html"><button>Open</button></a></div>
+    <div class="action-box"><h3>MEGALONO 3.0</h3><a href="Megalono 3.0.html"><button>Register Now</button></a></div>
+    <div class="action-box"><h3>LOGOS 2.0</h3><a href="logos.html"><button>Register Now</button></a></div>
+    <div class="action-box"><h3>WAY LIGHT BIBLE STUDY</h3><a href="https://chat.whatsapp.com/KrGKMg4gRcL1gGUpZb3tRY"><button>Join Today</button></a></div>
+    <div class="action-box"><h3>ASAPHIANS</h3><a href="ASA.HTML"><button>Book Now</button></a></div>
+  </section>
+
+  <section class="info-boxes fade-up">
+    <div class="info-box">
+      <h3>Vision</h3>
+      <p>We aim to provide a loving platform for youth and believers to grow in their Christian walk—equipping them spiritually, emotionally, and relationally.</p>
+    </div>
+    <div class="info-box">
+      <h3>Mission</h3>
+      <p>Our mission is to share the Gospel and empower youth to overcome both physical and spiritual battles—strengthening their faith in all areas of life.</p>
+    </div>
+  </section>
+
+  <!-- ✅ DYNAMIC COUNTER SECTION -->
+  <section class="counters fade-up">
+    <div class="counter-box">
+      <h2 id="memberCount" class="count">0</h2>
+      <p>YFC Members</p>
+    </div>
+    <div class="counter-box">
+      <h2 class="count" data-target="7">0</h2>
+      <p>Events</p>
+    </div>
+    <div class="counter-box">
+      <h2 class="count" data-target="12">0</h2>
+      <p>No. of Leaders</p>
+    </div>
+  </section>
+
+  <section class="running-event fade-up">
+    <h2>🎉 Currently Running Event</h2>
+    <p>WAY LIGHT Bible Study - Every Wednesday & Thursday 9 PM to 10 PM</p>
+  </section>
+
+  <section class="join-section fade-up">
+    <h2>Why should you join YFC?</h2>
+    <p>Join closely with a vibrant youth community, contribute to meaningful causes, and grow spiritually!</p>
+  </section>
+
+  <!-- ✅ IMAGE UPLOAD SECTION -->
+  <section class="upload-section fade-up">
+    <h3>Upload your memories with Youth for Christ</h3>
+    <input type="file" id="imageInput">
+    <button id="uploadButton">Upload</button>
+  </section>
+
+  <footer>
+    <p>Contact us at <a href="mailto: yfchrist2021@gamil.com">yfchrist2021@gmail.com</a></p>
+    <p><a href="https://www.instagram.com/youth_4__christ?igsh=MWphdGp4MXI4cGJjOQ==
+
+">Instagram</a> | <a href="https://youtube.com/@youthforchrist-n8q?si=knnDss9Ny0jj5EsG">YouTube</a></p>
+  </footer>
+
+  <!-- ✅ FIREBASE + SCRIPT -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC3XkBAjFKRxaMVJBHjfNaxx_es0-1aQm4",
+      authDomain: "youthforchrist-347d4.firebaseapp.com",
+      projectId: "youthforchrist-347d4",
+      storageBucket: "youthforchrist-347d4.appspot.com",
+      messagingSenderId: "1062209777347",
+      appId: "1:1062209777347:web:fedcb5ca39e8a0b727bc76",
+      measurementId: "G-7NTLZ7WTD4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    // ✅ Load member counter
+    async function loadMemberCount() {
+      const ref = doc(db, "counters", "yfcCounter");
+      const snap = await getDoc(ref);
+      const count = snap.exists() ? snap.data().value : 0;
+      animateCount(document.getElementById("memberCount"), count);
+    }
+
+    function animateCount(el, target) {
+      let current = 0;
+      const increment = Math.ceil(target / 50);
+      const interval = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          el.textContent = target;
+          clearInterval(interval);
+        } else {
+          el.textContent = current;
+        }
+      }, 30);
+    }
+
+    loadMemberCount();
+
+    // ✅ Image Upload Logic
+    document.getElementById("uploadButton").addEventListener("click", async () => {
+      const fileInput = document.getElementById("imageInput");
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert("Please select an image to upload.");
+        return;
+      }
+
+      const timestamp = Date.now();
+      const storageRef = ref(storage, `yfc-memories/${timestamp}_${file.name}`);
+
+      try {
+        await uploadBytes(storageRef, file);
+        const downloadURL = await getDownloadURL(storageRef);
+        alert("✅ Image uploaded successfully!\nURL:\n" + downloadURL);
+      } catch (error) {
+        console.error("Upload failed:", error);
+        alert("❌ Upload failed. Please try again.");
+      }
+    });
+  </script>
+
+  <script src="yfc.js"></script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+:root {
+  --main-color: #FFAD60;
+  --secondary-color: #FF6B6B;
+  --background: #0f0f0f;
+  --white: #ffffff;
+  --semi-black: rgba(0, 0, 0, 0.85);
+  --glow-color: rgba(255, 173, 96, 0.3);
+  --light-glow: rgba(255, 173, 96, 0.15);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--white);
+  overflow-x: hidden;
+  position: relative;
+  line-height: 1.7;
+}
+
+/* Header */
+header {
+  background: var(--semi-black);
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--main-color);
+  box-shadow: 0 2px 10px var(--glow-color);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 2rem;
+  color: var(--main-color);
+  font-weight: bold;
+  text-shadow: 0 0 5px var(--main-color);
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  gap: 30px;
+}
+
+nav a {
+  color: var(--white);
+  text-decoration: none;
+  position: relative;
+  font-size: 1rem;
+  padding: 5px;
+}
+
+nav a::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  height: 2px;
+  background-color: var(--main-color);
+  transition: width 0.4s ease;
+}
+
+nav a:hover::before {
+  width: 100%;
+}
+
+nav a:hover {
+  color: var(--main-color);
+}
+
+/* Contact Section */
+#contact {
+  padding: 80px 20px;
+  max-width: 1000px;
+  margin: auto;
+  position: relative;
+  z-index: 2;
+  animation: fadeUp 1.5s ease-in-out forwards;
+  opacity: 0;
+}
+
+#contact h2 {
+  font-size: 2.5rem;
+  text-align: center;
+  color: var(--main-color);
+  text-shadow: 0 0 8px var(--main-color);
+  margin-bottom: 40px;
+  position: relative;
+}
+
+#contact h2::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  margin: 10px auto 0;
+  background: linear-gradient(to right, var(--main-color), var(--secondary-color));
+  border-radius: 2px;
+  animation: glowLine 2s infinite ease-in-out;
+}
+
+#contact p {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#contact a {
+  color: var(--main-color);
+  text-decoration: none;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+#contact a:hover {
+  color: var(--secondary-color);
+  text-shadow: 0 0 10px var(--secondary-color);
+}
+
+/* Map Image Hover */
+#contact img {
+  border-radius: 10px;
+  box-shadow: 0 0 20px var(--light-glow);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  margin: 20px auto;
+  display: block;
+}
+
+#contact img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px var(--main-color);
+}
+
+/* Map iframe */
+iframe {
+  border-radius: 14px;
+  margin-top: 30px;
+  box-shadow: 0 0 25px var(--glow-color);
+  transition: transform 0.5s ease;
+}
+
+iframe:hover {
+  transform: scale(1.02);
+}
+
+/* Footer */
+footer {
+  background: var(--semi-black);
+  padding: 40px;
+  text-align: center;
+  color: var(--main-color);
+  border-top: 2px solid var(--main-color);
+  font-size: 1rem;
+  box-shadow: 0 -2px 10px var(--light-glow);
+  z-index: 2;
+  position: relative;
+}
+
+/* Floating Balls */
+body::after {
+  content: "";
+  position: fixed;
+  top: -100px;
+  left: -100px;
+  width: 200vw;
+  height: 200vh;
+  background: radial-gradient(circle, rgba(255,173,96,0.05) 20%, transparent 70%) repeat;
+  background-size: 300px 300px;
+  animation: floatBalls 100s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes floatBalls {
+  0% { transform: translate(0%, 0%); }
+  100% { transform: translate(-10%, -10%); }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glowLine {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--main-color);
+  }
+  50% {
+    box-shadow: 0 0 15px var(--main-color);
+  }
+}

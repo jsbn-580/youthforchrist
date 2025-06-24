@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>YFC | Sign Up & Login</title>
+  <link rel="stylesheet" href="login.css" />
+  <style>
+    /* Background Ball Animation */
+    .animated-bg {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; overflow: hidden;
+    }
+    .ball { position: absolute; border-radius: 50%; opacity: 0.3; animation: float 10s infinite ease-in-out alternate; }
+    .ball1 { width: 25px; height: 25px; background: #f6e3da; top: 20%; left: 5%; animation-delay: 0s; }
+    .ball2 { width: 35px; height: 35px; background: #e9d5c9; top: 60%; left: 10%; animation-delay: 2s; }
+    .ball3 { width: 20px; height: 20px; background: #ddc4b2; top: 40%; left: 90%; animation-delay: 4s; }
+    .ball4 { width: 30px; height: 30px; background: #e6d4c3; top: 10%; left: 75%; animation-delay: 1s; }
+    .ball5 { width: 22px; height: 22px; background: #cdb6aa; top: 70%; left: 40%; animation-delay: 3s; }
+    .ball6 { width: 18px; height: 18px; background: #f3e9e3; top: 25%; left: 85%; animation-delay: 5s; }
+    .ball7 { width: 15px; height: 15px; background: #ddc4b2; top: 50%; left: 20%; animation-delay: 6s; }
+    .ball8 { width: 28px; height: 28px; background: #e9d5c9; top: 85%; left: 60%; animation-delay: 7s; }
+    .ball9 { width: 24px; height: 24px; background: #e6d4c3; top: 75%; left: 50%; animation-delay: 8s; }
+    .ball10 { width: 19px; height: 19px; background: #f6e3da; top: 15%; left: 30%; animation-delay: 9s; }
+    @keyframes float {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(20px, -30px); }
+      100% { transform: translate(-20px, 30px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="animated-bg">
+    <div class="ball ball1"></div><div class="ball ball2"></div><div class="ball ball3"></div><div class="ball ball4"></div>
+    <div class="ball ball5"></div><div class="ball ball6"></div><div class="ball ball7"></div><div class="ball ball8"></div>
+    <div class="ball ball9"></div><div class="ball ball10"></div>
+  </div>
+
+  <header>
+    <div class="logo">Youth for Christ</div>
+    <nav>
+      <ul>
+        <li><a href="yfc.html">Home</a></li>
+        <li><a href="#signup">Sign Up</a></li>
+        <li><a href="#login">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Sign Up Section -->
+    <section class="form-box" id="signup">
+      <h2>Sign Up</h2>
+      <form id="signupForm">
+        <input type="text" name="fullName" placeholder="Full Name" required />
+        <input type="text" name="username" placeholder="Username" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <input type="date" name="dob" placeholder="Date of Birth" required />
+
+        <!-- State Dropdown -->
+        <select name="state" required>
+          <option value="">Select State</option>
+          <option>Kerala</option><option>Tamil Nadu</option><option>Karnataka</option><option>Andhra Pradesh</option>
+          <option>Telangana</option><option>Maharashtra</option><option>Gujarat</option><option>Punjab</option>
+          <option>Rajasthan</option><option>Delhi</option><option>Uttar Pradesh</option><option>Madhya Pradesh</option>
+          <option>Bihar</option><option>Odisha</option><option>Jharkhand</option><option>Assam</option>
+          <option>Goa</option><option>West Bengal</option><option>Haryana</option><option>Chhattisgarh</option>
+        </select>
+
+        <!-- District Dropdown -->
+        <select name="district" required>
+          <option value="">Select District</option>
+          <option>Thiruvananthapuram</option><option>Kollam</option><option>Pathanamthitta</option>
+          <option>Alappuzha</option><option>Kottayam</option><option>Idukki</option><option>Ernakulam</option>
+          <option>Thrissur</option><option>Palakkad</option><option>Malappuram</option><option>Kozhikode</option>
+          <option>Wayanad</option><option>Kannur</option><option>Kasaragod</option>
+        </select>
+
+        <input type="text" name="nationality" placeholder="Nationality" required />
+        <input type="text" name="church" placeholder="Church" required />
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="tel" name="phone" placeholder="Phone" required />
+        <button type="submit">Sign Up</button>
+      </form>
+    </section>
+
+    <!-- Login Section -->
+    <section class="form-box" id="login">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <input type="text" name="usernameOrEmail" placeholder="Username or Email" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+        <p style="text-align:center; margin-top:10px;">
+          <a href="#" onclick="forgotPassword()">Forgot your password?</a>
+        </p>
+      </form>
+    </section>
+  </main>
+
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC3XkBAjFKRxaMVJBHjfNaxx_es0-1aQm4",
+      authDomain: "youthforchrist-347d4.firebaseapp.com",
+      projectId: "youthforchrist-347d4",
+      storageBucket: "youthforchrist-347d4.appspot.com",
+      messagingSenderId: "1062209777347",
+      appId: "1:1062209777347:web:fedcb5ca39e8a0b727bc76",
+      measurementId: "G-7NTLZ7WTD4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    emailjs.init("mPiE36DFbhAj1eAiJ");
+
+    // SIGNUP
+    document.getElementById("signupForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const f = e.target;
+      const fullName = f.fullName.value, username = f.username.value, password = f.password.value;
+      const dob = f.dob.value, district = f.district.value, state = f.state.value;
+      const nationality = f.nationality.value, church = f.church.value, email = f.email.value, phone = f.phone.value;
+
+      try {
+        const userCred = await createUserWithEmailAndPassword(auth, email, password);
+        const uid = userCred.user.uid;
+
+        const counterRef = doc(db, 'counters', 'yfcCounter');
+        const counterSnap = await getDoc(counterRef);
+        let count = counterSnap.exists() ? counterSnap.data().value : 1;
+        const membershipID = `y4c${count}`;
+
+        await setDoc(doc(db, 'users', uid), {
+          fullName, username, dob, district, state, nationality, church,
+          email, phone, membershipID, quizPoints: 0, gamePoints: 0, isAdmin: false
+        });
+        await setDoc(counterRef, { value: count + 1 });
+
+        await emailjs.send("service_iqkuwzl", "template_a78q2bc", {
+          fullName, username, membershipID, district, phone, email,
+          message: `Hi ${fullName}, Welcome to Youth For Christ!\nYour Membership ID is ${membershipID}.\nJoin our Bible classes every Wed & Thu at 9 PM.`
+        });
+
+        alert("Signup successful! Your ID is " + membershipID);
+      } catch (err) {
+        alert("Signup Error: " + err.message);
+      }
+    });
+
+    // LOGIN
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const input = form.usernameOrEmail.value;
+      const password = form.password.value;
+
+      try {
+        let email = input;
+        if (!input.includes('@')) {
+          const q = query(collection(db, "users"), where("username", "==", input));
+          const snapshot = await getDocs(q);
+          if (snapshot.empty) throw new Error("No user with this username.");
+          email = snapshot.docs[0].data().email;
+        }
+
+        await signInWithEmailAndPassword(auth, email, password);
+        window.location.href = "dashboard.html";
+      } catch (err) {
+        alert("Login Error: " + err.message);
+      }
+    });
+
+    // RESET
+    window.forgotPassword = function () {
+      const email = prompt("Enter your registered email:");
+      if (!email) return;
+      sendPasswordResetEmail(auth, email)
+        .then(() => alert("Reset link sent!"))
+        .catch(err => alert("Error: " + err.message));
+    };
+  </script>
+</body>
+</html>

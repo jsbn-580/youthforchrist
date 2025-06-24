@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>YFC | Dashboard</title>
+  <link rel="stylesheet" href="login.css" />
+  <style>
+    body {
+      background: #fdf5f0;
+      font-family: 'Segoe UI', sans-serif;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: #fff;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #cc7a6f;
+      font-size: 2rem;
+      animation: fadeInTop 1.2s ease-out;
+    }
+
+    @keyframes fadeInTop {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    main {
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      animation: fadeIn 1.2s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      padding: 30px;
+      margin-bottom: 40px;
+      transition: 0.3s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+    }
+
+    .field {
+      margin-bottom: 10px;
+    }
+
+    .field span {
+      font-weight: bold;
+      color: #444;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background: #cc7a6f;
+      color: #fff;
+    }
+
+    input[type="number"] {
+      width: 80px;
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      padding: 10px 16px;
+      background: #cc7a6f;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
+
+    button:hover {
+      background: #b0635c;
+      transform: scale(1.05);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #confetti {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="confetti"></canvas>
+
+  <header><h1>🎉 Welcome to Your YFC Dashboard</h1></header>
+  <main>
+    <div id="profileCard" class="card">
+      <h2>Your Info</h2>
+      <div id="userDetails"></div>
+    </div>
+
+    <div id="adminPanel" class="card hidden">
+      <h2>Admin: Update User Scores</h2>
+      <input type="file" id="csvFile" accept=".csv" />
+      <button id="uploadCsv">Upload Scores via CSV</button>
+      <table id="userTable">
+        <thead>
+          <tr><th>Member ID</th><th>Username</th><th>Quiz Pts</th><th>Game Pts</th><th>Total</th><th>Update</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      getDocs,
+      updateDoc,
+      where,
+      query
+    } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const config = {
+      apiKey: "AIzaSyC3XkBAjFKRxaMVJBHjfNaxx_es0-1aQm4",
+      authDomain: "youthforchrist-347d4.firebaseapp.com",
+      projectId: "youthforchrist-347d4",
+      storageBucket: "youthforchrist-347d4.appspot.com",
+      messagingSenderId: "1062209777347",
+      appId: "1:1062209777347:web:fedcb5ca39e8a0b727bc76",
+      measurementId: "G-7NTLZ7WTD4"
+    };
+
+    const app = initializeApp(config);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    function calcLevel(total) {
+      if (total >= 300) return Math.floor(total / 100) + ' (Advanced)';
+      if (total >= 200) return Math.floor(total / 100) + ' (Intermediate)';
+      if (total >= 100) return Math.floor(total / 100) + ' (Beginner)';
+      return 'Newbie';
+    }
+
+    // ✅ Load User
+    onAuthStateChanged(auth, async user => {
+      if (!user) return window.location.href = 'login.html';
+
+      confettiBoom(); // 🎉 Celebrate login
+
+      const userSnap = await getDoc(doc(db, 'users', user.uid));
+      if (!userSnap.exists()) return alert("User data missing!");
+      const u = userSnap.data();
+      const total = u.quizPoints + u.gamePoints;
+
+      document.getElementById('userDetails').innerHTML = `
+        <div class="field"><span>Name:</span> ${u.fullName}</div>
+        <div class="field"><span>Username:</span> ${u.username}</div>
+        <div class="field"><span>Email:</span> ${u.email}</div>
+        <div class="field"><span>Membership ID:</span> ${u.membershipID}</div>
+        <div class="field"><span>District:</span> ${u.district}</div>
+        <div class="field"><span>Church:</span> ${u.church}</div>
+        <div class="field"><span>Quiz Points:</span> ${u.quizPoints}</div>
+        <div class="field"><span>Game Points:</span> ${u.gamePoints}</div>
+        <div class="field"><span>Total Points:</span> ${total}</div>
+        <div class="field"><span>Level:</span> ${calcLevel(total)}</div>
+      `;
+
+      if (u.isAdmin) loadAdmin();
+    });
+
+    async function loadAdmin() {
+      document.getElementById('adminPanel').classList.remove('hidden');
+      const tbody = document.querySelector('#userTable tbody');
+      tbody.innerHTML = '';
+
+      const all = await getDocs(collection(db, 'users'));
+      all.forEach(docSnap => {
+        const d = docSnap.data();
+        const total = d.quizPoints + d.gamePoints;
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${d.membershipID}</td>
+          <td>${d.username}</td>
+          <td><input type="number" value="${d.quizPoints}" /></td>
+          <td><input type="number" value="${d.gamePoints}" /></td>
+          <td>${total}</td>
+          <td><button class="updBtn">Save</button></td>
+        `;
+
+        const btn = row.querySelector('.updBtn');
+        btn.addEventListener('click', async () => {
+          const quiz = parseInt(row.children[2].firstChild.value) || 0;
+          const game = parseInt(row.children[3].firstChild.value) || 0;
+          await updateDoc(doc(db, 'users', docSnap.id), { quizPoints: quiz, gamePoints: game });
+          row.children[4].textContent = quiz + game;
+          alert(`Updated ${d.username}`);
+        });
+
+        tbody.appendChild(row);
+      });
+
+      document.getElementById('uploadCsv').addEventListener('click', () => {
+        const file = document.getElementById('csvFile').files[0];
+        if (!file) return alert("Please select a CSV file first.");
+        const reader = new FileReader();
+        reader.onload = async () => {
+          const lines = reader.result.trim().split(/\r?\n/);
+          for (const line of lines) {
+            const [membershipID, quiz, game] = line.split(',');
+            const q = query(collection(db, 'users'), where("membershipID", "==", membershipID));
+            const snap = await getDocs(q);
+            if (!snap.empty) {
+              const id = snap.docs[0].id;
+              await updateDoc(doc(db, 'users', id), {
+                quizPoints: parseInt(quiz) || 0,
+                gamePoints: parseInt(game) || 0
+              });
+            }
+          }
+          alert("CSV upload complete.");
+          loadAdmin();
+        };
+        reader.readAsText(file);
+      });
+    }
+
+    // 🎉 Confetti Animation on Login
+    function confettiBoom() {
+      const duration = 2 * 1000;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 999 };
+
+      function randomInRange(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+
+      const interval = setInterval(() => {
+        if (Date.now() > animationEnd) {
+          return clearInterval(interval);
+        }
+
+        const particleCount = 60 * (duration / 1000);
+        confetti({
+          particleCount,
+          origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+          ...defaults
+        });
+        confetti({
+          particleCount,
+          origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+          ...defaults
+        });
+      }, 250);
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</body>
+</html>

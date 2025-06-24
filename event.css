@@ -1,0 +1,136 @@
+:root {
+  --gray: #CFCCC7;
+  --light-warm: #E9E2DC;
+  --peach: #D0AF9E;
+  --dark: #4F4A46;
+  --brick: #BA6958;
+  --white: #ffffff;
+}
+
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--light-warm);
+  color: var(--dark);
+  padding-bottom: 40px;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Fog Background Animation */
+.fog-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  background: url('https://i.ibb.co/dKbL8gN/fog-texture.png') repeat;
+  opacity: 0.15;
+  animation: moveFog 60s linear infinite;
+  z-index: 0;
+}
+
+.fog-layer::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  backdrop-filter: blur(6px);
+}
+
+/* Keyframe for fog */
+@keyframes moveFog {
+  0% {
+    transform: translateX(-10%) translateY(-10%);
+  }
+  100% {
+    transform: translateX(10%) translateY(10%);
+  }
+}
+
+/* Navbar */
+.navbar {
+  background-color: var(--white);
+  color: var(--dark);
+  padding: 15px 30px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 4px solid var(--brick);
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.nav-home {
+  color: var(--brick);
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.navbar h1 {
+  font-size: 1.5rem;
+  color: var(--brick);
+}
+
+/* Event Section */
+.event-section {
+  padding: 60px 20px;
+  max-width: 1200px;
+  margin: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.event-title {
+  font-size: 2rem;
+  color: var(--brick);
+  margin-bottom: 30px;
+  border-left: 6px solid var(--dark);
+  padding-left: 14px;
+  animation: fadeInUp 1s ease-out forwards;
+  opacity: 0;
+}
+
+/* Fade-in animation */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Grid Layout */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.photo-grid img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.photo-grid img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}

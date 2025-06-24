@@ -1,0 +1,205 @@
+:root {
+  --light-peach: #fdf5f0;
+  --peach: #ffe5d4;
+  --nude1: #f6e3da;
+  --nude2: #e9d5c9;
+  --nude3: #ddc4b2;
+  --nude4: #e6d4c3;
+  --nude5: #cdb6aa;
+  --nude6: #f3e9e3;
+  --dark: #3b2e2a;
+  --white: #fff;
+  --accent: #cc7a6f;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: var(--light-peach);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Background Balls */
+.animated-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.ball {
+  position:sticky;
+  border-radius: 100%;
+  opacity: 0.3;
+  animation: float 5s linear infinite;
+}
+
+.ball1 { width: 25px; height: 25px; background: var(--nude1); top: 20%; left: 5%; animation-delay: 0s; }
+.ball2 { width: 35px; height: 35px; background: var(--nude2); top: 60%; left: 10%; animation-delay: 2s; }
+.ball3 { width: 20px; height: 20px; background: var(--nude3); top: 40%; left: 90%; animation-delay: 4s; }
+.ball4 { width: 30px; height: 30px; background: var(--nude4); top: 10%; left: 75%; animation-delay: 1s; }
+.ball5 { width: 22px; height: 22px; background: var(--nude5); top: 70%; left: 40%; animation-delay: 3s; }
+.ball6 { width: 18px; height: 18px; background: var(--nude6); top: 25%; left: 85%; animation-delay: 5s; }
+.ball7 { width: 15px; height: 15px; background: var(--nude3); top: 50%; left: 20%; animation-delay: 6s; }
+.ball8 { width: 28px; height: 28px; background: var(--nude2); top: 85%; left: 60%; animation-delay: 7s; }
+.ball9 { width: 24px; height: 24px; background: var(--nude4); top: 75%; left: 50%; animation-delay: 8s; }
+.ball10 { width: 19px; height: 19px; background: var(--nude1); top: 15%; left: 30%; animation-delay: 9s; }
+
+@keyframes float {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(20px, -30px); }
+  100% { transform: translate(-20px, 30px); }
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  background: var(--white);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.logo {
+  font-size: 1.8rem;
+  color: var(--accent);
+  font-weight: bold;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--dark);
+  font-weight: 500;
+  position: relative;
+}
+
+nav a::after {
+  content: '';
+  height: 2px;
+  background: var(--accent);
+  width: 0;
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  transition: 0.3s;
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+/* Form Boxes */
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 20px 40px;
+  gap: 50px;
+}
+
+.form-box {
+  background: var(--white);
+  padding: 30px 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 25px rgba(0,0,0,0.1);
+  width: 90%;
+  max-width: 450px;
+  animation: popIn 1.2s ease-out;
+}
+
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.form-box h2 {
+  color: var(--accent);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input {
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid var(--nude3);
+  background: var(--light-peach);
+}
+
+button {
+  background: var(--accent);
+  color: var(--white);
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Footer */
+footer {
+  background: var(--peach);
+  text-align: center;
+  padding: 30px 10px;
+  font-size: 0.95rem;
+  color: var(--dark);
+  margin-top: 50px;
+}
+/* Add to your existing CSS or paste entirely */
+
+select {
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid var(--nude3);
+  background: var(--light-peach);
+  font-family: 'Segoe UI', sans-serif;
+  color: var(--dark);
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%233b2e2a' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 18px;
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(204, 122, 111, 0.2);
+}
+
+/* For mobile browser dropdown tap target */
+@media (max-width: 600px) {
+  select {
+    font-size: 1rem;
+  }
+}
